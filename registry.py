@@ -489,6 +489,10 @@ def main() -> None:
         DRY_RUN = True
         print("Dry run mode enabled. No git commits will be performed.")
 
+    # If the github repo argument is in the format https://github.com/user/repo, convert it to user/repo:
+    if args.github_repo.startswith("https://github.com/") and "/" in args.github_repo[19:]:
+        args.github_repo = args.github_repo[19:]
+
     if args.command == "add":
         dependencies = []
         if args.dependencies:

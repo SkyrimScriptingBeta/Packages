@@ -1,3 +1,23 @@
+# Author: Mrowr Purr
+# Description: A script to manage package registries for vcpkg and xmake.
+#
+# Usage:
+# > python registry.py
+# > python registry.py ls
+# > python registry.py add my-package user/repo
+# > python registry.py update my-package
+# > python registry.py rm my-package
+#
+# Implementation notes:
+#
+# > This script only uses the Python standard library.
+# > so that it is easy to share and run on any system
+# > without requiring additional dependencies like pip
+# > or a virtual environment.
+#
+# > This script is intentionally stored in a single file
+# > to make it easy to copy and paste into a project.
+
 import argparse
 import datetime
 import json
@@ -20,6 +40,14 @@ DRY_RUN = False
 #         if not folder.exists():
 #             print(f"Creating {folder}")
 #             folder.mkdir(exist_ok=True, parents=True)
+
+# Some git commands which can become functions:
+# self.git(["add", baseline_path])
+# self.git(["commit", "--amend", "--no-edit"])
+# self.git(["commit", "-m", commit_message])
+# self.git(["rm", "-r", self.get_port_folder_path(port_name)])
+# self.git(["rm", self.get_version_file_path(port_name)])
+# self.git(["rev-parse", "HEAD:ports/" + port_name])
 
 class Git:
     @staticmethod
@@ -400,6 +428,8 @@ file(INSTALL "${{SOURCE_PATH}}/LICENSE" DESTINATION "${{CURRENT_PACKAGES_DIR}}/s
         self.git(["add", baseline_path])
         self.git(["commit", "--amend", "--no-edit"])
         print(f"Successfully updated port '{port_name}'")
+
+
 
     def update_versions_file(self, port_name: str) -> None:
         # Get the current version-string from the vcpkg.json

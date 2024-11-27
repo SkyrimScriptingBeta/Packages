@@ -1,8 +1,7 @@
-# `Skyrim C++ Libraries`
+# `Skyrim C++ Libraries` <!-- omit in toc -->
 
 ![Skyrim Scripting C++ Libraries](resources/images/dragon-holding-cpp.jpg)
 
-- [`Skyrim C++ Libraries`](#skyrim-c-libraries)
 - [`vcpkg` + `xmake`](#vcpkg--xmake)
 - [The Libraries](#the-libraries)
 - [Build Tool Configuration](#build-tool-configuration)

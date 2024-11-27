@@ -92,7 +92,13 @@ def get_github_latest_commit_info(github_user: str, github_repo: str, ref: str) 
         sys.exit(1)
 
 
-def create_portfile_contents_vcpkg_from_git(port_name: str, github_user: str, github_repo: str, ref: str, options_text: str) -> str:
+def create_portfile_contents_vcpkg_from_git(port_name: str, github_user: str, github_repo: str, ref: str, options_text: str, header_only: bool) -> str:
+    cleanup_code = """
+file(REMOVE_RECURSE
+    "${CURRENT_PACKAGES_DIR}/debug"
+    "${CURRENT_PACKAGES_DIR}/lib"
+)""" if header_only else ""
+
     return f"""vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/{github_user}/{github_repo}.git
@@ -103,19 +109,20 @@ vcpkg_cmake_configure(
     SOURCE_PATH ${{SOURCE_PATH}}{options_text}
 )
 
-vcpkg_cmake_install()
-
-file(REMOVE_RECURSE
-    "${{CURRENT_PACKAGES_DIR}}/debug"
-    "${{CURRENT_PACKAGES_DIR}}/lib"
-)
+vcpkg_cmake_install(){cleanup_code}
 
 file(MAKE_DIRECTORY "${{CURRENT_PACKAGES_DIR}}/share/${{PORT}}")
 file(INSTALL "${{SOURCE_PATH}}/LICENSE" DESTINATION "${{CURRENT_PACKAGES_DIR}}/share/${{PORT}}" RENAME copyright)
 """
 
 
-def create_portfile_contents_download_latest(port_name: str, github_user: str, github_repo: str, ref: str, options_text: str) -> str:
+def create_portfile_contents_download_latest(port_name: str, github_user: str, github_repo: str, ref: str, options_text: str, header_only: bool) -> str:
+    cleanup_code = """
+file(REMOVE_RECURSE
+    "${CURRENT_PACKAGES_DIR}/debug"
+    "${CURRENT_PACKAGES_DIR}/lib"
+)""" if header_only else ""
+
     return f"""file(DOWNLOAD "https://api.github.com/repos/{github_user}/{github_repo}/tarball/{ref or 'main'}" ${{DOWNLOADS}}/{port_name}-latest.tar.gz
     SHOW_PROGRESS
 )
@@ -129,27 +136,22 @@ vcpkg_cmake_configure(
     SOURCE_PATH ${{SOURCE_PATH}}{options_text}
 )
 
-vcpkg_cmake_install()
-
-file(REMOVE_RECURSE
-    "${{CURRENT_PACKAGES_DIR}}/debug"
-    "${{CURRENT_PACKAGES_DIR}}/lib"
-)
+vcpkg_cmake_install(){cleanup_code}
 
 file(MAKE_DIRECTORY "${{CURRENT_PACKAGES_DIR}}/share/${{PORT}}")
 file(INSTALL "${{SOURCE_PATH}}/LICENSE" DESTINATION "${{CURRENT_PACKAGES_DIR}}/share/${{PORT}}" RENAME copyright)
 """
 
 
-def create_portfile_contents(port_name: str, github_user: str, github_repo: str, latest: bool, ref: str, options: list) -> str:
+def create_portfile_contents(port_name: str, github_user: str, github_repo: str, latest: bool, ref: str, options: list, header_only: bool) -> str:
     options_text = ""
     if options:
         options_text = "\n    OPTIONS "
         options_text += " ".join([f"-D{option}" for option in options])
     if latest:
-        return create_portfile_contents_download_latest(port_name, github_user, github_repo, ref, options_text)
+        return create_portfile_contents_download_latest(port_name, github_user, github_repo, ref, options_text, header_only)
     else:
-        return create_portfile_contents_vcpkg_from_git(port_name, github_user, github_repo, ref, options_text)
+        return create_portfile_contents_vcpkg_from_git(port_name, github_user, github_repo, ref, options_text, header_only)
 
 
 def create_vcpkg_json_dict(port_name: str, port_description: str, github_user: str, github_repo: str, version_string: str, dependencies: list) -> dict:
@@ -168,7 +170,7 @@ def create_vcpkg_json_dict(port_name: str, port_description: str, github_user: s
     return vcpkg_json
 
 
-def add_port(port_name: str, github_user: str, github_repo: str, latest: bool, ref: str, dependencies: list, options: list) -> None:
+def add_port(port_name: str, github_user: str, github_repo: str, latest: bool, ref: str, dependencies: list, options: list, header_only: bool) -> None:
     if port_exists(port_name):
         print(f"Port {port_name} already exists.")
         sys.exit(1)
@@ -202,7 +204,7 @@ def add_port(port_name: str, github_user: str, github_repo: str, latest: bool, r
 
     # Create the portfile.cmake
     portfile_contents = create_portfile_contents(
-        port_name, github_user, github_repo, latest, ref, options)
+        port_name, github_user, github_repo, latest, ref, options, header_only)
     portfile_path = get_portfile_path(port_name)
     print(f"Writing {portfile_path}")
     with open(portfile_path, "w") as f:
@@ -463,6 +465,8 @@ def main() -> None:
                             default="", help="Comma-separated list of dependencies.")
     add_parser.add_argument(
         '--options', help='Comma-separated list of CMake options in the format "Option=Value"', default='')
+    add_parser.add_argument("-h", "--header-only", action="store_true",
+                         help="Configure as header-only library (removes lib/debug folders)")
 
     subparsers.add_parser(
         "list", help="List all ports in the registry.")
@@ -503,7 +507,7 @@ def main() -> None:
             options = args.options.split(",")
         github_user, github_repo = args.github_repo.split("/")
         add_port(args.port_name, github_user, github_repo, args.latest,
-                 args.ref, dependencies, options)
+                 args.ref, dependencies, options, args.header_only)
     elif args.command == "list":
         list_ports()
     elif args.command == "remove":

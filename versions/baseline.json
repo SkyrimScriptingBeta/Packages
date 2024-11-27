@@ -3,6 +3,10 @@
     "example-library": {
       "baseline": "2024-11-27-2aa7280",
       "port-version": 0
+    },
+    "example-header-only-library": {
+      "baseline": "2024-11-27-a1d4c6d",
+      "port-version": 0
     }
   }
 }

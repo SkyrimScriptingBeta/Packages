@@ -2,8 +2,21 @@
 
 ![Skyrim Scripting C++ Libraries](resources/images/dragon-holding-cpp.jpg)
 
+- [`Skyrim C++ Libraries`](#skyrim-c-libraries)
+- [`vcpkg` + `xmake`](#vcpkg--xmake)
+- [The Libraries](#the-libraries)
+- [Build Tool Configuration](#build-tool-configuration)
+  - [`xmake`](#xmake)
+  - [`vcpkg`](#vcpkg)
+    - [`vcpkg` Configuration](#vcpkg-configuration)
+      - [`vcpkg-configuration.json`](#vcpkg-configurationjson)
+        - [`vcpkg` Baseline](#vcpkg-baseline)
+        - [`SkyrimScriptingBeta` Baseline](#skyrimscriptingbeta-baseline)
+      - [`vcpkg.json`](#vcpkgjson)
+    - [`CMake` Configuration](#cmake-configuration)
 
-## `vcpkg` + `xmake`
+
+# `vcpkg` + `xmake`
 
 <img src="resources/images/cmake-and-xmake.png" align="right" height="100" />
 

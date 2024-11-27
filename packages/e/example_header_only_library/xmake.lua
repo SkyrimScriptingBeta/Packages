@@ -8,4 +8,6 @@ package("example_header_only_library")
 
     add_versions("0.0.1", "3A6291CE6AF17A75E2B19A778D12C1E6AD347BD250348DB5AEBB101E085EC58E")
 
-    https://github.com/SkyrimScriptingBeta/ExampleHeaderOnlyLibrary/archive/refs/tags/v0.0.1.tar.gz
+    on_install(function (package)
+        import("package.tools.xmake").install(package, {})
+    end)

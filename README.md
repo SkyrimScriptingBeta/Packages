@@ -2,6 +2,8 @@
 
 ![Skyrim Scripting C++ Libraries](resources/images/dragon-holding-cpp.jpg)
 
+---
+
 - [`vcpkg` + `xmake`](#vcpkg--xmake)
 - [The Libraries](#the-libraries)
 - [Build Tool Configuration](#build-tool-configuration)
@@ -14,6 +16,7 @@
       - [`vcpkg.json`](#vcpkgjson)
     - [`CMake` Configuration](#cmake-configuration)
 
+---
 
 # `vcpkg` + `xmake`
 

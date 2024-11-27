@@ -283,9 +283,10 @@ def remove_port(port_name: str) -> None:
     git(["rm", get_version_file_path(port_name)])
 
     versions_folder_path = get_version_folder_path(port_name)
-    if not any(versions_folder_path.iterdir()):
-        print(f"Removing {versions_folder_path}")
-        versions_folder_path.rmdir()
+    if versions_folder_path.exists():
+        if not any(versions_folder_path.iterdir()):
+            print(f"Removing {versions_folder_path}")
+            versions_folder_path.rmdir()
 
     baseline_path = get_baseline_path()
     with open(baseline_path, "r") as f:
@@ -490,7 +491,7 @@ def main() -> None:
         print("Dry run mode enabled. No git commits will be performed.")
 
     # If the github repo argument is in the format https://github.com/user/repo, convert it to user/repo:
-    if args.github_repo.startswith("https://github.com/") and "/" in args.github_repo[19:]:
+    if hasattr(args, 'github_repo') and args.github_repo.startswith("https://github.com/"):
         args.github_repo = args.github_repo[19:]
 
     if args.command == "add":

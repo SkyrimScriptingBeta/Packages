@@ -1,3 +1,8 @@
 {
-  "default": {}
+  "default": {
+    "example-header-only-library": {
+      "baseline": "2024-11-25-5cc5c4d",
+      "port-version": 0
+    }
+  }
 }

@@ -6,7 +6,7 @@ package("example_header_only_library")
     add_urls("https://github.com/SkyrimScriptingBeta/ExampleHeaderOnlyLibrary/archive/refs/tags/$(version).tar.gz",
             "https://github.com/SkyrimScriptingBeta/ExampleHeaderOnlyLibrary.git")
 
-    add_versions("0.0.1", "3A6291CE6AF17A75E2B19A778D12C1E6AD347BD250348DB5AEBB101E085EC58E")
+    add_versions("0.0.1", "ce9ba0eb8e00684981856b98378027b87ad137f77fc00a669cda6a8a549df2e5")
 
     on_install(function (package)
         import("package.tools.xmake").install(package, {})

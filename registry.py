@@ -7,57 +7,23 @@ import sys
 from abc import ABC, abstractmethod
 from pathlib import Path
 from urllib.request import urlopen
+from dataclasses import dataclass
 
 DRY_RUN = False
 
-class PackageRegistry(ABC):
-    @abstractmethod
-    def add_port(self, *args, **kwargs):
-        pass
+# TODO
+# class PackagesFolder:
+#     def __init__(self, root_folder: Path):
+#         self.root_folder = root_folder
+#
+#     def mkdir(self, folder: Path) -> None:
+#         if not folder.exists():
+#             print(f"Creating {folder}")
+#             folder.mkdir(exist_ok=True, parents=True)
 
-    @abstractmethod
-    def remove_port(self, port_name: str):
-        pass
-
-    @abstractmethod
-    def update_port(self, port_name: str, ref: str = None):
-        pass
-
-    @abstractmethod
-    def list_ports(self):
-        pass
-
-class VcpkgPackageRegistry(PackageRegistry):
-    def port_exists(self, port_name: str) -> bool:
-        return self.get_port_folder_path(port_name).exists()
-
-    def check_port_name_validity(self, port_name: str) -> bool:
-        return re.compile("^[a-z0-9]+(-[a-z0-9]+)*$").match(port_name)
-
-    def get_version_folder_path(self, port_name: str) -> Path:
-        return Path("versions") / f"{port_name[0].lower()}-"
-
-    def get_version_file_path(self, port_name: str) -> Path:
-        return self.get_version_folder_path(port_name) / f"{port_name}.json"
-
-    def get_port_folder_path(self, port_name: str) -> Path:
-        return Path("ports") / port_name
-
-    def get_portfile_path(self, port_name: str) -> Path:
-        return self.get_port_folder_path(port_name) / "portfile.cmake"
-
-    def get_vcpkg_json_path(self, port_name: str) -> Path:
-        return self.get_port_folder_path(port_name) / "vcpkg.json"
-
-    def get_baseline_path(self) -> Path:
-        return Path("versions") / "baseline.json"
-
-    def mkdir(self, folder: Path) -> None:
-        if not folder.exists():
-            print(f"Creating {folder}")
-            folder.mkdir(exist_ok=True, parents=True)
-
-    def git(self, args: list, working_dir: str = None) -> str:
+class Git:
+    @staticmethod
+    def exec(args: list[str], working_dir: str | None = None) -> str:
         args = [str(arg) for arg in args]
         text_args = [f'"{arg}"' if " " in arg else arg for arg in args]
         print(f"git {' '.join(text_args)}")
@@ -72,22 +38,115 @@ class VcpkgPackageRegistry(PackageRegistry):
             cwd=working_dir,
         ).stdout
 
-    def get_git_tree_sha(self, port_name) -> str:
-        output = self.git(["rev-parse", "HEAD:ports/" + port_name])
+class GitHub:
+    @dataclass
+    class GitHubRepo:
+        url: str
+        username: str
+        repo_name: str
+
+    class GitHubApi:
+        pass
+
+        @dataclass
+        class GitHubRepoInfo:
+            description: str
+
+        @dataclass
+        class GitHubCommitInfo:
+            date: str
+            sha: str
+            message: str
+
+class PackageRegistry(ABC):
+    @abstractmethod
+    def add_package(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
+    def remove_port(self, port_name: str):
+        pass
+
+    @abstractmethod
+    def update_port(self, port_name: str, ref: str = None):
+        pass
+
+    @abstractmethod
+    def list_ports(self):
+        pass
+
+    @abstractmethod
+    def package_exists(self, package_name: str) -> bool:
+        pass
+
+    @staticmethod
+    def git(args: list[str], working_dir: str | None = None) -> str:
+            return Git.exec(args, working_dir)
+
+
+class VcpkgPackageRegistry(PackageRegistry):
+    def package_exists(self, port_name: str) -> bool:
+        if self.get_port_folder_path(port_name).exists():
+            return any(self.get_port_folder_path(port_name).iterdir())
+        return False
+
+    @staticmethod
+    def check_port_name_validity(port_name: str) -> bool:
+        return not not re.compile("^[a-z0-9]+(-[a-z0-9]+)*$").match(port_name)
+
+    @staticmethod
+    def get_version_folder_path(port_name: str) -> Path:
+        return Path("versions") / f"{port_name[0].lower()}-"
+
+    def get_version_file_path(self, port_name: str) -> Path:
+        return self.get_version_folder_path(port_name) / f"{port_name}.json"
+
+    @staticmethod
+    def get_port_folder_path(port_name: str) -> Path:
+        return Path("ports") / port_name
+
+    def get_portfile_path(self, port_name: str) -> Path:
+        return self.get_port_folder_path(port_name) / "portfile.cmake"
+
+    def get_vcpkg_json_path(self, port_name: str) -> Path:
+        return self.get_port_folder_path(port_name) / "vcpkg.json"
+
+    @staticmethod
+    def get_baseline_path() -> Path:
+        return Path("versions") / "baseline.json"
+
+    @staticmethod
+    def mkdir(folder: Path) -> None:
+        if not folder.exists():
+            print(f"Creating {folder}")
+            folder.mkdir(exist_ok=True, parents=True)
+
+    @staticmethod
+    def get_git_tree_sha(port_name) -> str:
+        output = Git.exec(["rev-parse", "HEAD:ports/" + port_name])
         return output.strip()
 
-    def get_github_repo_info(self, username: str, repo_name: str) -> dict:
+    @staticmethod
+    def get_github_repo_info(username: str, repo_name: str) -> GitHub.GitHubApi.GitHubRepoInfo:
         url = f"https://api.github.com/repos/{username}/{repo_name}"
         with urlopen(url) as response:
-            return json.load(response)
+            data = json.load(response)
+            return GitHub.GitHubApi.GitHubRepoInfo(description=data["description"])
 
-    def get_github_latest_commit_info(self, github_user: str, github_repo: str, ref: str) -> dict:
+    @staticmethod
+    def get_github_latest_commit_info(github_user: str, github_repo: str, ref: str) -> GitHub.GitHubApi.GitHubCommitInfo:
         ref = ref or "HEAD"
         url = f"https://api.github.com/repos/{github_user}/{github_repo}/commits/{ref}"
         with urlopen(url) as response:
-            return json.load(response)
+            data = json.load(response)
+            return GitHub.GitHubApi.GitHubCommitInfo(
+                date=data["commit"]["committer"]["date"][:10],
+                sha=data["sha"],
+                message=data["commit"]["message"]
+            )
 
-    def create_portfile_contents_vcpkg_from_git(self, port_name: str, github_user: str, github_repo: str, ref: str, options_text: str, header_only: bool) -> str:
+    @staticmethod
+    def create_portfile_contents_vcpkg_from_git(port_name: str, github_user: str, github_repo: str, ref: str, options_text: str, header_only: bool) -> str:
         cleanup_code = """
 file(REMOVE_RECURSE
     "${CURRENT_PACKAGES_DIR}/debug"
@@ -110,7 +169,8 @@ file(MAKE_DIRECTORY "${{CURRENT_PACKAGES_DIR}}/share/${{PORT}}")
 file(INSTALL "${{SOURCE_PATH}}/LICENSE" DESTINATION "${{CURRENT_PACKAGES_DIR}}/share/${{PORT}}" RENAME copyright)
 """
 
-    def create_portfile_contents_download_latest(self, port_name: str, github_user: str, github_repo: str, ref: str, options_text: str, header_only: bool) -> str:
+    @staticmethod
+    def create_portfile_contents_download_latest(port_name: str, github_user: str, github_repo: str, ref: str, options_text: str, header_only: bool) -> str:
         cleanup_code = """
 file(REMOVE_RECURSE
     "${CURRENT_PACKAGES_DIR}/debug"
@@ -146,7 +206,8 @@ file(INSTALL "${{SOURCE_PATH}}/LICENSE" DESTINATION "${{CURRENT_PACKAGES_DIR}}/s
         else:
             return self.create_portfile_contents_vcpkg_from_git(port_name, github_user, github_repo, ref, options_text, header_only)
 
-    def create_vcpkg_json_dict(self, port_name: str, port_description: str, github_user: str, github_repo: str, version_string: str, dependencies: list) -> dict:
+    @staticmethod
+    def create_vcpkg_json_dict(port_name: str, port_description: str, github_user: str, github_repo: str, version_string: str, dependencies: list) -> dict:
         vcpkg_json = {
             "name": port_name,
             "version-string": version_string,
@@ -160,8 +221,8 @@ file(INSTALL "${{SOURCE_PATH}}/LICENSE" DESTINATION "${{CURRENT_PACKAGES_DIR}}/s
             vcpkg_json["dependencies"].append(dependency)
         return vcpkg_json
 
-    def add_port(self, port_name: str, github_user: str, github_repo: str, latest: bool, ref: str, dependencies: list, options: list, header_only: bool) -> None:
-        if self.port_exists(port_name):
+    def add_package(self, port_name: str, github_user: str, github_repo: str, latest: bool, ref: str, dependencies: list, options: list, header_only: bool) -> None:
+        if self.package_exists(port_name):
             print(f"Port {port_name} already exists.")
             sys.exit(1)
         if not self.check_port_name_validity(port_name):
@@ -170,13 +231,11 @@ file(INSTALL "${{SOURCE_PATH}}/LICENSE" DESTINATION "${{CURRENT_PACKAGES_DIR}}/s
         print(f"Adding port '{port_name}'")
         # Get repository information
         repo_info = self.get_github_repo_info(github_user, github_repo)
-        repo_description = repo_info["description"]
+        repo_description = repo_info.description
         # Get commit info from either the ref or the latest commit
-        latest_commit_info = self.get_github_latest_commit_info(github_user, github_repo, ref)
-        latest_commit_date = latest_commit_info["commit"]["committer"]["date"][:10]
-        latest_commit_sha = latest_commit_info["sha"]
+        latest_commit= self.get_github_latest_commit_info(github_user, github_repo, ref)
         if not latest and not ref:
-            ref = latest_commit_sha
+            ref = latest_commit.sha
         # Create the port directory
         port_dir = self.get_port_folder_path(port_name)
         self.mkdir(port_dir)
@@ -190,7 +249,7 @@ file(INSTALL "${{SOURCE_PATH}}/LICENSE" DESTINATION "${{CURRENT_PACKAGES_DIR}}/s
         with open(portfile_path, "w") as f:
             f.write(portfile_contents)
         # Create the vcpkg.json
-        version_string = "latest" if latest else f"{latest_commit_date}-{latest_commit_sha[:7]}"
+        version_string = "latest" if latest else f"{latest_commit.date}-{latest_commit.sha[:7]}"
         vcpkg_json_dict = self.create_vcpkg_json_dict(port_name, repo_description, github_user, github_repo, version_string, dependencies)
         vcpkg_json_path = self.get_vcpkg_json_path(port_name)
         print(f"Writing {vcpkg_json_path}")
@@ -269,7 +328,7 @@ file(INSTALL "${{SOURCE_PATH}}/LICENSE" DESTINATION "${{CURRENT_PACKAGES_DIR}}/s
         print(f"Successfully removed port '{port_name}'")
 
     def update_port(self, port_name: str, ref: str = None) -> None:
-        if not self.port_exists(port_name):
+        if not self.package_exists(port_name):
             print(f"Port {port_name} does not exist.")
             sys.exit(1)
         print(f"Updating port '{port_name}'")
@@ -287,21 +346,18 @@ file(INSTALL "${{SOURCE_PATH}}/LICENSE" DESTINATION "${{CURRENT_PACKAGES_DIR}}/s
         repo_url = url_pattern.search(portfile_contents).group(1)
         github_user, github_repo = repo_url.split("/")[-2:]
         # Get the latest commit info
-        latest_commit_info = self.get_github_latest_commit_info(github_user, github_repo, None)
-        latest_commit_date = latest_commit_info["commit"]["committer"]["date"][:10]
-        latest_commit_sha = latest_commit_info["sha"]
-        latest_commit_message = latest_commit_info["commit"]["message"]
+        latest_commit= self.get_github_latest_commit_info(github_user, github_repo, None)
         # Get the REF from the portfile
         ref_pattern = re.compile(r'REF\s+([\w\-]+)')
         current_ref = ref_pattern.search(portfile_contents).group(1)
         print(f"GitHub repository URL: {repo_url}")
-        print(f"Latest commit: {latest_commit_sha}")
-        print(f"> {latest_commit_message}")
-        if latest_commit_sha == current_ref:
+        print(f"Latest commit: {latest_commit.sha}")
+        print(f"> {latest_commit.message}")
+        if latest_commit.sha == current_ref:
             print(f"Port {port_name} is already up to date.")
             sys.exit(0)
         # Update the existing portfile with the updated REF
-        portfile_contents = portfile_contents.replace(f"REF {current_ref}", f"REF {latest_commit_sha}")
+        portfile_contents = portfile_contents.replace(f"REF {current_ref}", f"REF {latest_commit.sha}")
         portfile_path = self.get_portfile_path(port_name)
         print(f"Updating {portfile_path}")
         with open(portfile_path, "w") as f:
@@ -310,7 +366,7 @@ file(INSTALL "${{SOURCE_PATH}}/LICENSE" DESTINATION "${{CURRENT_PACKAGES_DIR}}/s
         vcpkg_json_path = self.get_vcpkg_json_path(port_name)
         with open(vcpkg_json_path, "r") as f:
             vcpkg_json_data = json.load(f)
-        version_string = f"{latest_commit_date}-{latest_commit_sha[:7]}"
+        version_string = f"{latest_commit.date}-{latest_commit.sha[:7]}"
         vcpkg_json_data["version-string"] = version_string
         print(f"Updating {vcpkg_json_path}")
         with open(vcpkg_json_path, "w") as f:
@@ -393,7 +449,7 @@ file(INSTALL "${{SOURCE_PATH}}/LICENSE" DESTINATION "${{CURRENT_PACKAGES_DIR}}/s
 
 class PackageRegistryCLI:
     def __init__(self):
-        self.registries = {}
+        self.registries: dict[str, PackageRegistry] = {}
         self.args = argparse.Namespace | None
         self.help_text: str = ""
 
@@ -459,7 +515,7 @@ class PackageRegistryCLI:
                 if self.args.options:
                     options = self.args.options.split(",")
                 github_user, github_repo = self.args.github_repo.split("/")
-                registry.add_port(
+                registry.add_package(
                     self.args.port_name,
                     github_user,
                     github_repo,

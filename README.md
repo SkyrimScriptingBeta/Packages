@@ -46,9 +46,15 @@ Custom registries for `vcpkg` are a bit more involved, but still easy to set up.
 
 ### `vcpkg` Configuration
 
-To allow downloading packages from registries, you need to create a `vcpkg-configuration.json` file:
+There are two `vcpkg` configuration files you need to create:
+
+- `vcpkg-configuration.json`
+- `vcpkg.json`
 
 #### `vcpkg-configuration.json`
+
+To allow downloading packages from registries, you need to create a `vcpkg-configuration.json` file:
+
 
 ```json
 {
@@ -67,6 +73,8 @@ To allow downloading packages from registries, you need to create a `vcpkg-confi
     ]
 }
 ```
+
+> Note: be sure to update the `packages: [...]` list with the names of the packages you want to use from the registry.
 
 You should update the `baseline` values to the latest commit hash of the respective repositories.
 
@@ -95,3 +103,46 @@ You can repeat the same process for the SkyrimScriptingBeta repository.
 You can get the latest commit hash from here:
 
 https://github.com/SkyrimScriptingBeta/Packages/commits/main/
+
+#### `vcpkg.json`
+
+The `vcpkg.json` file is where you specify the packages you want to use:
+
+```json
+{
+    "name": "my-project-this-can-be-anything",
+    "version-string": "0.0.1",
+    "dependencies": [
+        "some-library-from-this-registry"
+    ]
+}
+```
+
+> Note: the `name` and `version-string` fields aren't important.
+> They just need to be valid.
+>
+> The `name` needs to be all lowercase and contain only letters, numbers, and hyphens.
+
+The `dependencies: [...]` list is a list of all `vcpkg` packages you want to use from any registry.
+
+So, for example, you might want to use `spdlog` from the main `vcpkg` registry, and `some-library-from-this-registry` from this registry:
+
+```json
+{
+    "name": "my-project-this-can-be-anything",
+    "version-string": "0.0.1",
+    "dependencies": [
+        "spdlog",
+        "some-library-from-this-registry"
+    ]
+}
+```
+
+### `CMake` Configuration
+
+There are existing documents on how to use `vcpkg` with `CMake`.
+
+This can differ depending on your project setup and code editor / IDE.
+
+> In the future I will provide template repositories to get you started quickly
+> if you need to use `CMake` with `vcpkg` and this registry.

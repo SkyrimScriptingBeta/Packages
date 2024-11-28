@@ -10,6 +10,8 @@
     {
       "name": "vcpkg-cmake-config",
       "host": true
-    }
+    },
+    "rsm-binary-io",
+    "spdlog"
   ]
 }

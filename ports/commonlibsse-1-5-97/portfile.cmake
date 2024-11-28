@@ -7,7 +7,7 @@ vcpkg_from_git(
 vcpkg_configure_cmake(
     SOURCE_PATH "${SOURCE_PATH}"
     PREFER_NINJA
-    OPTIONS -DSKYRIM_SUPPORT_AE=off -DSKSE_SUPPORT_XBYAK =on
+    OPTIONS -DSKYRIM_SUPPORT_AE=off -DSKSE_SUPPORT_XBYAK=on
 )
 
 vcpkg_install_cmake()

@@ -7,6 +7,10 @@
     "example-header-only-library": {
       "baseline": "2024-11-27-a1d4c6d",
       "port-version": 0
+    },
+    "commonlibsse-ng-latest": {
+      "baseline": "latest",
+      "port-version": 0
     }
   }
 }

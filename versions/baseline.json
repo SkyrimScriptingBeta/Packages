@@ -11,6 +11,10 @@
     "commonlibsse-ng-latest": {
       "baseline": "latest",
       "port-version": 0
+    },
+    "commonlibsse-ng": {
+      "baseline": "2024-09-04-b93280e",
+      "port-version": 0
     }
   }
 }

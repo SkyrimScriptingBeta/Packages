@@ -12,6 +12,7 @@
       "host": true
     },
     "rsm-binary-io",
-    "spdlog"
+    "spdlog",
+    "xbyak"
   ]
 }

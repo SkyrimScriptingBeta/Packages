@@ -1,10 +1,10 @@
-file(DOWNLOAD "https://api.github.com/repos/powerof3/CommonLibSSE/tarball/main" ${DOWNLOADS}/commonlibsse-powerof3-latest-latest.tar.gz
+file(DOWNLOAD "https://api.github.com/repos/powerof3/CommonLibSSE/tarball/dev" ${DOWNLOADS}/commonlibsse-powerof3-latest.tar.gz
     SHOW_PROGRESS
 )
 
 vcpkg_extract_source_archive(
     SOURCE_PATH
-    ARCHIVE ${DOWNLOADS}/commonlibsse-powerof3-latest-latest.tar.gz
+    ARCHIVE ${DOWNLOADS}/commonlibsse-powerof3-latest.tar.gz
 )
 
 option(REX_OPTION_INI "Enables ini config support for REX." OFF)

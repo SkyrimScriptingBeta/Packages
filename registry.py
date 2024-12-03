@@ -60,13 +60,19 @@ class Git:
         if DRY_RUN and args[0] == "commit":
             print("git commit skipped [--dry-run]")
             return ""
-        return subprocess.run(
+        result = subprocess.run(
             ["git"] + args,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
             cwd=working_dir,
-        ).stdout
+        )
+        print(result.stdout)
+        print(result.stderr, file=sys.stderr)
+        if result.returncode != 0:
+            print(f"git {' '.join(text_args)} failed with code {result.returncode}")
+            sys.exit(1)
+        return result.stdout
 
 
 class GitHub:

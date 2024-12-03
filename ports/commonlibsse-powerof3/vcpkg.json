@@ -4,25 +4,20 @@
   "description": "This is a reverse engineered library for Skyrim Special Edition",
   "features": {
     "rex-ini": {
-      "description": "Enables ini config support for REX.",
-      "default": false
+      "description": "Enables ini config support for REX."
     },
     "rex-json": {
-      "description": "Enables json config support for REX.",
-      "default": false
+      "description": "Enables json config support for REX."
     },
     "rex-toml": {
-      "description": "Enables toml config support for REX.",
-      "default": false
+      "description": "Enables toml config support for REX."
     },
     "xbyak": {
       "description": "Enables trampoline support for Xbyak.",
-      "default": true,
       "dependencies": ["xbyak"]
     },
     "skyrim-ae": {
-      "description": "Enables support for Skyrim AE",
-      "default": false
+      "description": "Enables support for Skyrim AE"
     }
   },
   "dependencies": [

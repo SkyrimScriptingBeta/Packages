@@ -19,6 +19,10 @@
     "commonlibsse-powerof3": {
       "baseline": "2024-11-29-f4478e5",
       "port-version": 0
+    },
+    "commonlibsse-powerof3-latest": {
+      "baseline": "latest",
+      "port-version": 0
     }
   }
 }

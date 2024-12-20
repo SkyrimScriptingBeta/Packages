@@ -27,6 +27,10 @@
     "cmake-skyrim": {
       "baseline": "2024-12-20-8020754",
       "port-version": 0
+    },
+    "skse-plugin-definition": {
+      "baseline": "2024-12-03-698ab4d",
+      "port-version": 0
     }
   }
 }

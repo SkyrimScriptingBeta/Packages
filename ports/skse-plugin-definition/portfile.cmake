@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/SkyrimScriptingBeta/skse-plugin-definition.git
-    REF 77dd3f0740245131b8d5940e1af7aa077daf98fd
+    REF 4579dc04af1b868e4e7588710068779d50d065e9
 )
 
 vcpkg_cmake_configure(

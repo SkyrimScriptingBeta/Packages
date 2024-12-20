@@ -1,6 +1,6 @@
 {
   "name": "skse-plugin-definition",
-  "version-string": "2024-12-20-77dd3f0",
+  "version-string": "2024-12-20-4579dc0",
   "description": "Helper library for defining SKSE plugins",
   "dependencies": [
     {

@@ -23,6 +23,10 @@
     "commonlibsse-powerof3-latest": {
       "baseline": "latest",
       "port-version": 0
+    },
+    "cmake-skyrim": {
+      "baseline": "2024-12-20-8020754",
+      "port-version": 0
     }
   }
 }

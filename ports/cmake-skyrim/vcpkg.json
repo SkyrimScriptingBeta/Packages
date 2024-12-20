@@ -1,0 +1,15 @@
+{
+  "name": "cmake-skyrim",
+  "version-string": "2024-12-20-8020754",
+  "description": "CMake functions for Skyrim modding",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}

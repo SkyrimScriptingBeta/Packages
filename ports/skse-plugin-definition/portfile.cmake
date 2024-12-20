@@ -4,7 +4,11 @@ vcpkg_from_git(
     REF 698ab4d7e4ac94d1aad00fb05da7469834fc646b
 )
 
-vcpkg_cmake_configure(SOURCE_PATH ${SOURCE_PATH})
+vcpkg_cmake_configure(
+    SOURCE_PATH ${SOURCE_PATH}
+    OPTIONS -DBUILD_EXAMPLE=OFF
+)
+
 vcpkg_cmake_install()
 
 file(REMOVE_RECURSE

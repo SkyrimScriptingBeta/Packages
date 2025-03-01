@@ -7,7 +7,7 @@ package("example_static_library")
             "https://github.com/SkyrimScriptingBeta/ExampleStaticLibrary.git")
 
     -- Require users to specify which CommonLib package they want
-    add_configs("commonlib", {description = "Specify package name for commonlib dependency", default = nil, type = "string"})
+    add_configs("commonlib", {description = "Specify package name for commonlib dependency", default = "", type = "string"})
 
     on_load(function (package)
         local commonlib = package:config("commonlib")

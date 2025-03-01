@@ -20,5 +20,7 @@ package("example_static_library")
     end)
 
     on_install(function (package)
-        import("package.tools.xmake").install(package, { configs = { commonlib = package:config("commonlib") } })
+        import("package.tools.xmake").install(package, {
+            commonlib = package:config("commonlib")
+        })
     end)

@@ -11,10 +11,7 @@ package("example_static_library")
 
     on_load(function (package)
         local commonlib = package:config("commonlib")
-        if commonlib then
-            print("Using CommonLib package: " .. commonlib)
-            package:add("deps", commonlib)
-        else
+        if not commonlib then
             raise("You must specify a CommonLib version, e.g., `xmake f --commonlib=skyrim-commonlib-ae`")
         end
     end)

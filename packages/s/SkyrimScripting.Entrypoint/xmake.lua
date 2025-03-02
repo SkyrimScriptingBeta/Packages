@@ -1,6 +1,6 @@
-package("skse_entrypoint")
+package("SkyrimScripting.Entrypoint")
     set_homepage("https://github.com/SkyrimScriptingBeta/SKSE_Entrypoint")
-    set_description("My library which uses CommonLib")
+    set_description("Allow multiple libraries to hook into your SKSE plugin entrypoint")
     set_license("0BSD")
 
     add_urls("https://github.com/SkyrimScriptingBeta/SKSE_Entrypoint/archive/refs/tags/$(version).tar.gz",
@@ -24,8 +24,8 @@ package("skse_entrypoint")
             -- Hardcoded options (disabling options which are 'true' for local development)
             require_commonlib = false,
             include_repo_skyrimscripting = false,
+            include_repo_mrowrlib = false,
             build_example = false,
-            build_papyrus_scripts = false,
-            include_repo_mrowrlib = false
+            build_papyrus_scripts = false
         })
     end)

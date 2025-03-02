@@ -1,4 +1,4 @@
-package("SkyrimScripting.Entrypoint")
+package("skyrim_scripting-entrypoint")
     set_homepage("https://github.com/SkyrimScriptingBeta/SKSE_Entrypoint")
     set_description("Allow multiple libraries to hook into your SKSE plugin entrypoint")
     set_license("0BSD")

@@ -8,14 +8,12 @@ package("SkyrimScripting.Logging")
     add_urls("https://github.com/SkyrimScriptingBeta/Logging/archive/refs/tags/$(version).tar.gz",
             "https://github.com/SkyrimScriptingBeta/Logging.git")
 
-    add_deps("_Log_")
-
     add_configs("commonlib", {description = "Specify package name for commonlib dependency", default = "", type = "string"})
     add_configs("require_commonlib", {description = "If true, add_requires the CommonLib package", default = true, type = "boolean"})
 
     add_configs("include_repo_skyrimscripting", {description = "Include SkyrimScripting repository during build", default = true, type = "boolean"})
     add_configs("include_repo_skyrimscripting_beta", {description = "Include SkyrimScripting repository during build", default = true, type = "boolean"})
-    add_configs("include_repo_mrowrlib", {description = "Include MrowrLib repository during build", default = true, type = "boolean"})
+    add_configs("include_repo_mrowrlib", {description = "Include MrowrLib repository during build", default = false, type = "boolean"})
 
     add_configs("build_example", {description = "Build example project using this library", default = false, type = "boolean"})
     add_configs("build_papyrus_scripts", {description = "Build Papyrus scripts", default = false, type = "boolean"})

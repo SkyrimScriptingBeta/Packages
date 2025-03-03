@@ -17,9 +17,6 @@ package("SkyrimScripting.Entrypoint")
     add_configs("build_example", {description = "Build example project using this library", default = false, type = "boolean"})
     add_configs("build_papyrus_scripts", {description = "Build Papyrus scripts", default = false, type = "boolean"})
 
-    add_configs("use_log_library", {description = "If true, builds with support for the _Log_ library", default = false, type = "boolean"})
-    add_configs("use_skse_plugin_info_library", {description = "If true, builds with support for the SKSEPluginInfo library", default = false, type = "boolean"})
-
     on_load(function (package)
         -- Require users to specify which CommonLib package they want
         local commonlib = package:config("commonlib")
@@ -35,8 +32,6 @@ package("SkyrimScripting.Entrypoint")
             include_repo_mrowrlib = package:config("include_repo_mrowrlib"),
             build_example = package:config("build_example"),
             build_papyrus_scripts = package:config("build_papyrus_scripts"),
-            require_commonlib = package:config("require_commonlib"),
-            use_log_library = package:config("use_log_library"),
-            use_skse_plugin_info_library = package:config("use_skse_plugin_info_library")
+            require_commonlib = package:config("require_commonlib")
         })
     end)

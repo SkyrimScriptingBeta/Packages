@@ -78,8 +78,6 @@ package("SkyrimScripting.Plugin")
             include_repo_mrowrlib = package:config("include_repo_mrowrlib"),
             build_example = package:config("build_example"),
             build_papyrus_scripts = package:config("build_papyrus_scripts"),
-            require_commonlib = package:config("require_commonlib"),
-            use_log_library = package:config("use_log_library"),
-            use_skyrimscripting_logging = package:config("use_skyrimscripting_logging")
+            require_commonlib = package:config("require_commonlib")
         })
     end)

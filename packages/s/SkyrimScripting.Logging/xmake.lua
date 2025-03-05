@@ -1,5 +1,3 @@
--- This is an example of a package() which can be shared in any xmake package registry
-
 package("SkyrimScripting.Logging")
     set_homepage("https://github.com/SkyrimScriptingBeta/Logging")
     set_description("Add logging to your SKSE plugin")
@@ -28,6 +26,16 @@ package("SkyrimScripting.Logging")
         local commonlib = package:config("commonlib")
         if not commonlib then
             raise("You must specify a CommonLib version, e.g., `xmake f --commonlib=skyrim-commonlib-ae`")
+        end
+
+        -- If use_log_library, then add the "_Log_" library to package deps:
+        if package:config("use_log_library") then
+            package:add("deps", "_Log_")
+        end
+
+        -- If use_skse_plugin_info_library, then add the "SKSEPluginInfo" library to package deps:
+        if package:config("use_skse_plugin_info_library") then
+            package:add("deps", "skse_plugin_info")
         end
     end)
 

@@ -55,7 +55,8 @@ package("SkyrimScripting.SKSE_Messages")
                 build_example = package:config("build_example"),
                 build_papyrus_scripts = package:config("build_papyrus_scripts"),
                 use_log_library = package:config("use_log_library"),
-                use_skse_plugin_info_library = package:config("use_skse_plugin_info_library")
+                use_skse_plugin_info_library = package:config("use_skse_plugin_info_library"),
+                use_skyrimscripting_entrypoint = true
             } })
         end
     end)

@@ -63,6 +63,7 @@ package("SkyrimScripting.Logging")
             build_papyrus_scripts = package:config("build_papyrus_scripts"),
             require_commonlib = package:config("require_commonlib"),
             use_log_library = package:config("use_log_library"),
-            use_skse_plugin_info_library = package:config("use_skse_plugin_info_library")
+            use_skse_plugin_info_library = package:config("use_skse_plugin_info_library"),
+            use_skyrimscripting_entrypoint = package:config("use_skyrimscripting_entrypoint")
         })
     end)

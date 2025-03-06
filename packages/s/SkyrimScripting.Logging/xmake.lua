@@ -18,6 +18,7 @@ package("SkyrimScripting.Logging")
     add_configs("build_example", {description = "Build example project using this library", default = false, type = "boolean"})
     add_configs("build_papyrus_scripts", {description = "Build Papyrus scripts", default = false, type = "boolean"})
 
+    add_configs("use_skyrimscripting_entrypoint", {description = "If true, builds with support for the SkyrimScripting.Entrypoint library", default = false, type = "boolean"})
     add_configs("use_log_library", {description = "If true, builds with support for the _Log_ library", default = false, type = "boolean"})
     add_configs("use_skse_plugin_info_library", {description = "If true, builds with support for the SKSEPluginInfo library", default = false, type = "boolean"})
 
@@ -36,6 +37,19 @@ package("SkyrimScripting.Logging")
         -- If use_skse_plugin_info_library, then add the "SKSEPluginInfo" library to package deps:
         if package:config("use_skse_plugin_info_library") then
             package:add("deps", "skse_plugin_info")
+        end
+
+        if package:config("use_skyrimscripting_entrypoint") then
+            -- [Entrypoint]
+            -- Require SkyrimScripting.Entrypoint, adding to package deps,
+            -- and pass along all of these config options: commonlib, include_repo_skyrimscripting, include_repo_mrowrlib, build_example
+            package:add("deps", "SkyrimScripting.Entrypoint", { configs = {
+                commonlib = commonlib,
+                require_commonlib = package:config("require_commonlib"),
+                include_repo_skyrimscripting = package:config("include_repo_skyrimscripting"),
+                include_repo_mrowrlib = package:config("include_repo_mrowrlib"),
+                build_example = package:config("build_example")
+            }})
         end
     end)
 

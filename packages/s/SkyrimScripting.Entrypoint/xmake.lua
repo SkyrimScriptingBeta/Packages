@@ -8,7 +8,7 @@ package("SkyrimScripting.Entrypoint")
 
     add_deps("global_macro_functions")
 
-    add_configs("commonlib", { description = "Specify package name for commonlib dependency", default = nil, type = "string" })
+    add_configs("commonlib", { description = "Specify package name for commonlib dependency", default = "skyrim-commonlib-ng", type = "string" })
 
     on_load(function (package)
         -- Require users to specify which CommonLib package they want

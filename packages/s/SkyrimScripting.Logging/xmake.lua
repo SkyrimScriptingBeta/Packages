@@ -6,7 +6,7 @@ package("SkyrimScripting.Logging")
     add_urls("https://github.com/SkyrimScriptingBeta/Logging/archive/refs/tags/$(version).tar.gz",
             "https://github.com/SkyrimScriptingBeta/Logging.git")
 
-    add_configs("commonlib", {description = "Specify package name for commonlib dependency", default = "", type = "string"})
+    add_configs("commonlib", { description = "Specify package name for commonlib dependency", default = nil, type = "string" })
 
     on_load(function (package)
         -- Require users to specify which CommonLib package they want

@@ -7,9 +7,6 @@ package("SkyrimScripting.Plugin")
             "https://github.com/SkyrimScriptingBeta/Plugin.git")
 
     add_deps("skse_plugin_info")
-    add_deps("SkyrimScripting.Entrypoint")
-    add_deps("SkyrimScripting.Logging")
-    add_deps("SkyrimScripting.SKSE_Messages")
 
     add_configs("commonlib", { description = "Specify package name for commonlib dependency", default = nil, type = "string" })
 
@@ -19,6 +16,10 @@ package("SkyrimScripting.Plugin")
         if not commonlib then
             raise("You must specify a CommonLib version, e.g., `xmake f --commonlib=skyrim-commonlib-ae`")
         end
+        
+        package:add("deps", "SkyrimScripting.Entrypoint", { configs = { commonlib = commonlib }})
+        package:add("deps", "SkyrimScripting.Logging", { configs = { commonlib = commonlib }})
+        package:add("deps", "SkyrimScripting.SKSE_Messages", { configs = { commonlib = commonlib }})
     end)
 
     on_install(function (package)

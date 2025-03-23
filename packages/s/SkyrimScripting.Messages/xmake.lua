@@ -1,10 +1,10 @@
-package("SkyrimScripting.Messages")
+package("SkyrimScripting.SKSE_Messages")
     set_homepage("https://github.com/SkyrimScriptingBeta/SKSE_Messages")
-    set_description("Send/Receive messages between mods")
+    set_description("Listen for SKSE messages")
     set_license("0BSD")
 
-    add_urls("https://github.com/SkyrimScriptingBeta/Messages/archive/refs/tags/$(version).tar.gz",
-            "https://github.com/SkyrimScriptingBeta/Messages.git")
+    add_urls("https://github.com/SkyrimScriptingBeta/SKSE_Messages/archive/refs/tags/$(version).tar.gz",
+            "https://github.com/SkyrimScriptingBeta/SKSE_Messages.git")
 
     add_deps("global_macro_functions")
 

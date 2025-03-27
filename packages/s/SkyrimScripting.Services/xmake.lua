@@ -22,6 +22,7 @@ package("SkyrimScripting.Services")
     on_install(function (package)
         import("package.tools.xmake").install(package, {
             commonlib = package:config("commonlib"),
-            build_example = false
+            build_example = false,
+            build_plugin = false
         })
     end)

@@ -1,12 +1,13 @@
-package("SkyrimScripting.Messages")
-    set_homepage("https://github.com/SkyrimScriptingBeta/Messages")
-    set_description("Send/Receive messages between mods")
+package("SkyrimScripting.Services")
+    set_homepage("https://github.com/SkyrimScriptingBeta/Services")
+    set_description("Share Services between SKSE plugins")
     set_license("0BSD")
 
-    add_urls("https://github.com/SkyrimScriptingBeta/Messages/archive/refs/tags/$(version).tar.gz",
-            "https://github.com/SkyrimScriptingBeta/Messages.git")
+    add_urls("https://github.com/SkyrimScriptingBeta/Services/archive/refs/tags/$(version).tar.gz",
+            "https://github.com/SkyrimScriptingBeta/Services.git")
 
-    add_deps("global_macro_functions")
+    add_deps("collections")
+    add_deps("unordered_dense")
 
     add_configs("commonlib", { description = "Specify package name for commonlib dependency", default = nil, type = "string" })
 

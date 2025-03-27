@@ -19,6 +19,8 @@ package("SkyrimScripting.Console")
         if not commonlib then
             raise("You must specify a CommonLib version, e.g., `xmake f --commonlib=skyrim-commonlib-ae`")
         end
+        
+        package:add("deps", "SkyrimScripting.Services", { configs = { commonlib = commonlib }})
     end)
 
     on_install(function (package)

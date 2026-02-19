@@ -4,10 +4,9 @@ package("rnnoise")
     set_license("BSD-3-Clause")
 
     add_urls("https://github.com/xiph/rnnoise.git")
-    add_versions("2024.12.18", "1cbdbcf1283499bbb2f32b239a1249ee9c113528")
+    add_versions("main", "main")
 
     on_install(function(package)
-        -- Write a simple xmake.lua to build rnnoise
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("rnnoise")

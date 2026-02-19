@@ -7,7 +7,6 @@ package("rnnoise")
     add_versions("master", "master")
 
     on_install(function(package)
-        -- Build with xmake directly, disabling OPUS FFT
         io.writefile("xmake.lua", [[
             add_rules("mode.debug", "mode.release")
             target("rnnoise")
@@ -17,8 +16,8 @@ package("rnnoise")
                 add_includedirs("include", {public = true})
                 add_includedirs("src")
                 add_headerfiles("include/(rnnoise.h)")
-                -- Do NOT define COMPILE_OPUS - use kiss_fft instead
-                add_defines("RNNOISE_BUILD")
+                -- COMPILE_OPUS is required - it enables the opus_fft_c implementation
+                add_defines("RNNOISE_BUILD", "COMPILE_OPUS")
                 if is_plat("windows") then
                     add_defines("WIN32", "_CRT_SECURE_NO_WARNINGS", "_USE_MATH_DEFINES")
                 end

@@ -3,15 +3,27 @@ package("rnnoise")
     set_description("Recurrent neural network for audio noise reduction")
     set_license("BSD-3-Clause")
 
-    -- Use TeaSpeak's CMake fork which has pre-trained model included
     add_urls("https://github.com/TeaSpeak/rnnoise-cmake.git")
     add_versions("master", "master")
 
     on_install(function(package)
-        local configs = {}
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
-        table.insert(configs, "-DRNNOISE_COMPILE_OPUS=OFF")
-        import("package.tools.cmake").install(package, configs)
+        -- Build with xmake directly, disabling OPUS FFT
+        io.writefile("xmake.lua", [[
+            add_rules("mode.debug", "mode.release")
+            target("rnnoise")
+                set_kind("static")
+                set_languages("c11")
+                add_files("src/*.c")
+                add_includedirs("include", {public = true})
+                add_includedirs("src")
+                add_headerfiles("include/(rnnoise.h)")
+                -- Do NOT define COMPILE_OPUS - use kiss_fft instead
+                add_defines("RNNOISE_BUILD")
+                if is_plat("windows") then
+                    add_defines("WIN32", "_CRT_SECURE_NO_WARNINGS", "_USE_MATH_DEFINES")
+                end
+        ]])
+        import("package.tools.xmake").install(package)
     end)
 
     on_test(function(package)

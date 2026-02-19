@@ -10,6 +10,7 @@ package("rnnoise")
     on_install(function(package)
         local configs = {}
         table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DRNNOISE_COMPILE_OPUS=OFF")
         import("package.tools.cmake").install(package, configs)
     end)
 

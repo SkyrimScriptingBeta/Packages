@@ -3,23 +3,15 @@ package("rnnoise")
     set_description("Recurrent neural network for audio noise reduction")
     set_license("BSD-3-Clause")
 
-    add_urls("https://github.com/xiph/rnnoise.git")
-    add_versions("main", "main")
+    -- Use jmvalin's cmake branch which has pre-trained model and CMake support
+    add_urls("https://github.com/GregorR/rnnoise-cmake.git")
+    add_versions("cmake", "master")
 
     on_install(function(package)
-        io.writefile("xmake.lua", [[
-            add_rules("mode.debug", "mode.release")
-            target("rnnoise")
-                set_kind("static")
-                set_languages("c11")
-                add_files("src/*.c")
-                add_includedirs("include", {public = true})
-                add_headerfiles("include/(rnnoise.h)")
-                if is_plat("windows") then
-                    add_defines("WIN32", "_USE_MATH_DEFINES")
-                end
-        ]])
-        import("package.tools.xmake").install(package)
+        local configs = {}
+        table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
+        table.insert(configs, "-DBUILD_SHARED_LIBS=OFF")
+        import("package.tools.cmake").install(package, configs)
     end)
 
     on_test(function(package)

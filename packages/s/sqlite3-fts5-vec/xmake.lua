@@ -1,7 +1,7 @@
 package("sqlite3-fts5-vec")
     set_homepage("https://sqlite.org/")
     set_description("SQLite3 with FTS5 full-text search and sqlite-vec vector search")
-    set_license("Public Domain", "MIT", "Apache-2.0")
+    set_license("Apache-2.0")
 
     -- The source is sqlite3 amalgamation; sqlite-vec amalgamation is fetched as a resource
     set_urls("https://sqlite.org/$(version)", {version = function (version)

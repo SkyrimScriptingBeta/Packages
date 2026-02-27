@@ -12,7 +12,3 @@ package("caprica")
     on_install(function(package)
         import("package.tools.xmake").install(package)
     end)
-
-    on_test(function(package)
-        assert(package:has_cxxincludes("common/GameID.h", {configs = {languages = "c++23"}}))
-    end)

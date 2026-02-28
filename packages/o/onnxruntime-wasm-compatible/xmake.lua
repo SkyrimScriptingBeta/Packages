@@ -32,8 +32,8 @@ package("onnxruntime-wasm-compatible")
             add_versions("1.22.0", "cab6dcbd77e7ec775390e7b73a8939d45fec3379b017c7cb74f5b204c1a1cc07")
         end
     elseif is_plat("wasm") then
-        set_urls("https://github.com/SkyrimScriptingBeta/onnxruntime-wasm/releases/download/v$(version)/onnxruntime-wasm-static-$(version).tar.gz")
-        add_versions("1.22.0", "TODO_REPLACE_WITH_SHA256_AFTER_UPLOAD")
+        set_urls("https://github.com/SkyrimScriptingBeta/Packages/releases/download/onnxruntime-wasm-v$(version)/onnxruntime-wasm-static-$(version).tar.gz")
+        add_versions("1.22.0", "60247cb697f97cfaa0ba5d5eb5c3befebf1b727dc46bd17b9c884c33c925e3ba")
     end
 
     on_load(function (package)

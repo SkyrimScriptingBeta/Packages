@@ -6,6 +6,9 @@ package("wicked-engine")
     add_versions("mrowrpurr", "mrowrpurr")
 
     add_defines("WICKED_CMAKE_BUILD")
+    if is_plat("windows") then
+        add_syslinks("comdlg32", "shell32")
+    end
 
     on_install(function(package)
         import("package.tools.xmake").install(package)

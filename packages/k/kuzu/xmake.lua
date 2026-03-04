@@ -2,7 +2,7 @@ package("kuzu")
     set_homepage("https://github.com/SkyrimScriptingBeta/kuzu")
     set_description("Kuzu - embedded graph database management system")
 
-    add_urls("https://github.com/SkyrimScriptinBeta/kuzu.git")
+    add_urls("https://github.com/SkyrimScriptingBeta/kuzu.git")
     add_versions("mrowrpurr", "mrowrpurr")
 
     if is_plat("windows") then

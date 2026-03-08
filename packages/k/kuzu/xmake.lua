@@ -5,6 +5,8 @@ package("kuzu")
     add_urls("https://github.com/SkyrimScriptingBeta/kuzu.git")
     add_versions("mrowrpurr", "mrowrpurr")
 
+    add_deps("lz4", "zstd")
+
     if is_plat("windows") then
         add_defines("KUZU_STATIC_DEFINE")
     end

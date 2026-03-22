@@ -11,6 +11,7 @@ package("graphiti")
     add_deps("cpp-httplib")
     add_deps("openssl3")
     add_deps("yaml-cpp")
+    add_deps("ixwebsocket")
 
     on_install(function(package)
         import("package.tools.xmake").install(package)

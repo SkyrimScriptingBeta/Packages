@@ -161,5 +161,3 @@ This can differ depending on your project setup and code editor / IDE.
 
 > In the future I will provide template repositories to get you started quickly
 > if you need to use `CMake` with `vcpkg` and this registry.
-
-TEST REPO UPDATE
